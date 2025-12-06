@@ -9,7 +9,11 @@ export const CarsContext = createContext<{
 export interface CarsContextProps extends PropsWithChildren {}
 export const ContextProvider = ({ children }: CarsContextProps) => {
     const [vehicles, setVehicles] = useState<Car[]>(
-        data.map((item, index) => ({ ...item, id: index })) as Car[]
+        data.map((item, index) => ({
+            ...item,
+            id: index,
+            auctionDateTime: "2025/12/15 09:00:00",
+        })) as Car[]
     );
 
     const addOrRemoveFavorite = (id: number) => {

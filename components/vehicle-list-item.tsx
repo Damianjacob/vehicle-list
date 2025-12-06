@@ -1,4 +1,5 @@
 import { Car } from "@/types/cars";
+import { getTimeUntilAuction } from "@/utils/dateUtils";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { Image, Pressable, StyleSheet, Text, View } from "react-native";
 
@@ -17,7 +18,7 @@ const VehicleListItem = ({
     // require the local image. Replace 'car.png' with your actual asset filename.
 
     return (
-        <View style={styles.mainContainer}>
+        <Pressable style={styles.mainContainer} onPress={onPressCard}>
             <View style={styles.imageContainer}>
                 <Image
                     source={defaultImage}
@@ -33,12 +34,22 @@ const VehicleListItem = ({
                 </View>
                 <View style={styles.row}>
                     <Text>
-                        {vehicle.fuel} {vehicle.engineSize} {vehicle.mileage}
+                        {vehicle.engineSize} {vehicle.fuel}
                     </Text>
                 </View>
                 <View style={styles.row}>
+                    <Text>Mileage: {vehicle.mileage}</Text>
+                </View>
+                <View style={styles.row}>
                     <Text>
-                        {vehicle.auctionDateTime} {vehicle.startingBid}
+                        <Ionicons name="time-outline" size={16} />{" "}
+                        {getTimeUntilAuction(vehicle.auctionDateTime)}
+                    </Text>
+                    <Text>
+                        Starting Bid:{" "}
+                        <Text style={{ fontWeight: "bold" }}>
+                            €{vehicle.startingBid}
+                        </Text>
                     </Text>
                 </View>
             </View>
@@ -52,7 +63,7 @@ const VehicleListItem = ({
                     color={vehicle.favourite ? "red" : "gray"}
                 />
             </Pressable>
-        </View>
+        </Pressable>
     );
 };
 
