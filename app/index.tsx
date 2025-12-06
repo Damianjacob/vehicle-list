@@ -1,6 +1,7 @@
 import FilterModal from "@/components/filter-modal";
 import VehicleListItem from "@/components/vehicle-list-item";
 import { CarsContext } from "@/providers/context-provider";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { useRouter } from "expo-router";
 import { useContext, useState } from "react";
@@ -21,7 +22,7 @@ export default function Home() {
     const router = useRouter();
 
     return (
-        <SafeAreaView>
+        <SafeAreaView style={{ flex: 1 }}>
             <View style={styles.filterRow}>
                 <Ionicons
                     name="heart"
@@ -29,12 +30,18 @@ export default function Home() {
                     color={showFavorites ? "red" : "gray"}
                     onPress={toggleShowFavorites}
                 />
-                <Ionicons
-                    name="filter"
-                    size={36}
-                    color={hasFiltersApplied ? "blue" : "gray"}
-                    onPress={() => setModalOpen(true)}
-                />
+                <View>
+                    <MaterialCommunityIcons
+                        name={
+                            hasFiltersApplied
+                                ? "filter-variant-plus"
+                                : "filter-variant"
+                        }
+                        size={36}
+                        color={hasFiltersApplied ? "blue" : "gray"}
+                        onPress={() => setModalOpen(true)}
+                    />
+                </View>
             </View>
             <FlatList
                 data={
@@ -54,8 +61,7 @@ export default function Home() {
                         onPressLike={addOrRemoveFavorite}
                     />
                 )}
-                style={{ paddingHorizontal: 16, marginBottom: 32 }}
-                // contentContainerStyle={{ marginBottom:  }}
+                style={{ flex: 1 }}
                 ItemSeparatorComponent={() => <View style={{ height: 12 }} />}
             />
             <FilterModal
