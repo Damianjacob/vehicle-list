@@ -12,7 +12,7 @@ import {
 
 import { ThemedText } from "@/components/themed-text";
 import { CarsContext } from "@/providers/context-provider";
-import { getTimeUntilAuction } from "@/utils/dateUtils";
+import { getTimeUntilAuction } from "@/utils/date-utils";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function CarDetail() {

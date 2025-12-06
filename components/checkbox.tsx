@@ -9,14 +9,11 @@ interface CheckboxProps {
 }
 
 const Checkbox = ({ title, onCheck, onUncheck, checked }: CheckboxProps) => {
-    // const [checked, setChecked] = useState(false);
-
     return (
         <View style={styles.container}>
             <MaterialCommunityIcons
                 onPress={() => {
                     checked ? onUncheck() : onCheck();
-                    // setChecked(!checked);
                 }}
                 name={checked ? "checkbox-outline" : "checkbox-blank-outline"}
                 size={24}

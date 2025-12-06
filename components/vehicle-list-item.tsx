@@ -1,5 +1,5 @@
 import { Car } from "@/types/cars";
-import { getTimeUntilAuction } from "@/utils/dateUtils";
+import { getTimeUntilAuction } from "@/utils/date-utils";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { Image, Pressable, StyleSheet, Text, View } from "react-native";
 

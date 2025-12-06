@@ -1,6 +1,6 @@
 import { Car } from "@/types/cars";
 import { Filters } from "@/types/filters";
-import { createContext, PropsWithChildren, useState } from "react";
+import { createContext, PropsWithChildren, useMemo, useState } from "react";
 import data from "../vehicles.json";
 
 export const vehicleMakes = Array.from(new Set(data.map((item) => item.make)));
@@ -60,9 +60,37 @@ export const ContextProvider = ({ children }: CarsContextProps) => {
         filters.minStartingBid !== undefined ||
         filters.maxStartingBid !== undefined;
 
-    const filteredVehicles = vehicles.filter((vehicle) =>
-        filters.makes.includes(vehicle.make)
-    );
+    const filteredVehicles = useMemo(() => {
+        console.log("Filtering vehicles with filters:");
+        const hasMakeFilter = !!filters.makes?.length;
+        const hasModelFilter = !!filters.models?.length;
+        const min = filters.minStartingBid;
+        const max = filters.maxStartingBid;
+
+        let filtered = vehicles;
+
+        if (hasMakeFilter) {
+            filtered = filtered.filter((vehicle) =>
+                filters.makes.includes(vehicle.make)
+            );
+        }
+
+        if (hasModelFilter) {
+            filtered = filtered.filter((vehicle) =>
+                filters.models.includes(vehicle.model)
+            );
+        }
+
+        if (min !== undefined) {
+            filtered = filtered.filter((vehicle) => vehicle.startingBid >= min);
+        }
+
+        if (max !== undefined) {
+            filtered = filtered.filter((vehicle) => vehicle.startingBid <= max);
+        }
+
+        return filtered;
+    }, [vehicles, filters]);
 
     const addOrRemoveFavorite = (id: number) => {
         const updatedVehicles = vehicles.map((vehicle) => {

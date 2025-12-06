@@ -8,7 +8,12 @@ import { FlatList, StyleSheet, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function Home() {
-    const { vehicles, addOrRemoveFavorite } = useContext(CarsContext);
+    const {
+        vehicles,
+        addOrRemoveFavorite,
+        hasFiltersApplied,
+        filteredVehicles,
+    } = useContext(CarsContext);
     const [modalOpen, setModalOpen] = useState(false);
     const router = useRouter();
 
@@ -19,12 +24,12 @@ export default function Home() {
                 <Ionicons
                     name="filter"
                     size={36}
-                    color={"gray"}
+                    color={hasFiltersApplied ? "blue" : "gray"}
                     onPress={() => setModalOpen(true)}
                 />
             </View>
             <FlatList
-                data={vehicles}
+                data={hasFiltersApplied ? filteredVehicles : vehicles}
                 keyExtractor={({ id }) => id.toString()}
                 renderItem={({ item }) => (
                     <VehicleListItem
@@ -35,7 +40,8 @@ export default function Home() {
                         onPressLike={addOrRemoveFavorite}
                     />
                 )}
-                style={{ paddingHorizontal: 16, marginVertical: 16 }}
+                style={{ paddingHorizontal: 16, marginBottom: 32 }}
+                // contentContainerStyle={{ marginBottom:  }}
                 ItemSeparatorComponent={() => <View style={{ height: 12 }} />}
             />
             <FilterModal
