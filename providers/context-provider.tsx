@@ -21,6 +21,9 @@ export interface CarsContextType {
     resetStartingBids: () => void;
     resetFilters: () => void;
     filters: Filters;
+    showFavorites: boolean;
+    favorites: Car[];
+    toggleShowFavorites: () => void;
     hasFiltersApplied?: boolean;
 }
 
@@ -36,6 +39,9 @@ export const CarsContext = createContext<CarsContextType>({
     setMaxStartingBid: () => {},
     resetStartingBids: () => {},
     resetFilters: () => {},
+    showFavorites: false,
+    favorites: [],
+    toggleShowFavorites: () => {},
     filters: { makes: [], models: [] },
     hasFiltersApplied: false,
 });
@@ -48,26 +54,37 @@ export const ContextProvider = ({ children }: CarsContextProps) => {
             auctionDateTime: "2025/12/15 09:00:00",
         })) as Car[]
     );
-
-    // initialize min/max starting bids as null (unset)
     const [filters, setFilters] = useState<Filters>({
         makes: [],
         models: [],
     });
-    const hasFiltersApplied =
-        filters.makes.length > 0 ||
-        filters.models.length > 0 ||
-        filters.minStartingBid !== undefined ||
-        filters.maxStartingBid !== undefined;
+    const [showFavorites, setShowFavorites] = useState<boolean>(false);
+
+    const toggleShowFavorites = () => {
+        setShowFavorites((prev) => !prev);
+    };
+    const hasFiltersApplied = useMemo(
+        () =>
+            filters.makes.length > 0 ||
+            filters.models.length > 0 ||
+            filters.minStartingBid !== undefined ||
+            filters.maxStartingBid !== undefined,
+        [filters]
+    );
+
+    const favoriteVehicles = useMemo(() => {
+        console.log("updateing favorite vehicles");
+        if (!showFavorites) return [];
+        return vehicles.filter((vehicle) => vehicle.favourite);
+    }, [vehicles, showFavorites]);
 
     const filteredVehicles = useMemo(() => {
-        console.log("Filtering vehicles with filters:");
         const hasMakeFilter = !!filters.makes?.length;
         const hasModelFilter = !!filters.models?.length;
         const min = filters.minStartingBid;
         const max = filters.maxStartingBid;
 
-        let filtered = vehicles;
+        let filtered = showFavorites ? favoriteVehicles : vehicles;
 
         if (hasMakeFilter) {
             filtered = filtered.filter((vehicle) =>
@@ -90,7 +107,7 @@ export const ContextProvider = ({ children }: CarsContextProps) => {
         }
 
         return filtered;
-    }, [vehicles, filters]);
+    }, [filters, vehicles, favoriteVehicles, showFavorites]);
 
     const addOrRemoveFavorite = (id: number) => {
         const updatedVehicles = vehicles.map((vehicle) => {
@@ -164,7 +181,10 @@ export const ContextProvider = ({ children }: CarsContextProps) => {
                 setMaxStartingBid,
                 resetStartingBids,
                 resetFilters,
+                showFavorites,
+                toggleShowFavorites,
                 filters,
+                favorites: favoriteVehicles,
                 filteredVehicles,
                 hasFiltersApplied,
             }}

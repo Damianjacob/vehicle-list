@@ -13,6 +13,9 @@ export default function Home() {
         addOrRemoveFavorite,
         hasFiltersApplied,
         filteredVehicles,
+        showFavorites,
+        toggleShowFavorites,
+        favorites,
     } = useContext(CarsContext);
     const [modalOpen, setModalOpen] = useState(false);
     const router = useRouter();
@@ -20,7 +23,12 @@ export default function Home() {
     return (
         <SafeAreaView>
             <View style={styles.filterRow}>
-                <Ionicons name="heart" size={36} color={"gray"} />
+                <Ionicons
+                    name="heart"
+                    size={36}
+                    color={showFavorites ? "red" : "gray"}
+                    onPress={toggleShowFavorites}
+                />
                 <Ionicons
                     name="filter"
                     size={36}
@@ -29,7 +37,13 @@ export default function Home() {
                 />
             </View>
             <FlatList
-                data={hasFiltersApplied ? filteredVehicles : vehicles}
+                data={
+                    hasFiltersApplied
+                        ? filteredVehicles
+                        : showFavorites
+                        ? favorites
+                        : vehicles
+                }
                 keyExtractor={({ id }) => id.toString()}
                 renderItem={({ item }) => (
                     <VehicleListItem
