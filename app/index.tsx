@@ -1,21 +1,28 @@
-import { ThemedText } from "@/components/themed-text";
+import FilterModal from "@/components/filter-modal";
 import VehicleListItem from "@/components/vehicle-list-item";
 import { CarsContext } from "@/providers/context-provider";
-import { Link, useRouter } from "expo-router";
-import { useContext } from "react";
-import { FlatList, Text, View } from "react-native";
+import Ionicons from "@expo/vector-icons/Ionicons";
+import { useRouter } from "expo-router";
+import { useContext, useState } from "react";
+import { FlatList, StyleSheet, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function Home() {
     const { vehicles, addOrRemoveFavorite } = useContext(CarsContext);
+    const [modalOpen, setModalOpen] = useState(false);
     const router = useRouter();
 
     return (
         <SafeAreaView>
-            <Text>Filter will go here</Text>
-            <Link href="/cars/1">
-                <ThemedText type="link">Go to car detail screen</ThemedText>
-            </Link>
+            <View style={styles.filterRow}>
+                <Ionicons name="heart" size={36} color={"gray"} />
+                <Ionicons
+                    name="filter"
+                    size={36}
+                    color={"gray"}
+                    onPress={() => setModalOpen(true)}
+                />
+            </View>
             <FlatList
                 data={vehicles}
                 keyExtractor={({ id }) => id.toString()}
@@ -31,6 +38,20 @@ export default function Home() {
                 style={{ paddingHorizontal: 16, marginVertical: 16 }}
                 ItemSeparatorComponent={() => <View style={{ height: 12 }} />}
             />
+            <FilterModal
+                modalOpen={modalOpen}
+                onClose={() => setModalOpen(false)}
+            />
         </SafeAreaView>
     );
 }
+
+const styles = StyleSheet.create({
+    filterRow: {
+        flexDirection: "row",
+        justifyContent: "space-between",
+        alignItems: "center",
+        paddingHorizontal: 16,
+        paddingVertical: 8,
+    },
+});

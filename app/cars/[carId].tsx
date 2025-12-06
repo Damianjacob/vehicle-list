@@ -11,9 +11,9 @@ import {
 } from "react-native";
 
 import { ThemedText } from "@/components/themed-text";
-import { ThemedView } from "@/components/themed-view";
 import { CarsContext } from "@/providers/context-provider";
 import { getTimeUntilAuction } from "@/utils/dateUtils";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function CarDetail() {
     const { carId } = useLocalSearchParams();
@@ -24,14 +24,14 @@ export default function CarDetail() {
 
     if (!vehicle) {
         return (
-            <ThemedView style={styles.center}>
+            <SafeAreaView style={styles.center}>
                 <ThemedText type="title">Vehicle not found</ThemedText>
-            </ThemedView>
+            </SafeAreaView>
         );
     }
 
     return (
-        <ThemedView style={styles.container}>
+        <SafeAreaView style={styles.container}>
             <ScrollView contentContainerStyle={styles.scrollContent}>
                 <Image
                     source={defaultImage}
@@ -95,7 +95,7 @@ export default function CarDetail() {
                     </Text>
                 </View>
             </ScrollView>
-        </ThemedView>
+        </SafeAreaView>
     );
 }
 

@@ -28,8 +28,8 @@ export default function RootLayout() {
                         options={{ headerShown: false }}
                     />
                     <Stack.Screen
-                        name="car-detail"
-                        options={{ headerShown: false }}
+                        name="cars/[carId]"
+                        options={{ title: "Car Details" }}
                     />
                 </Stack>
                 <StatusBar style="auto" />

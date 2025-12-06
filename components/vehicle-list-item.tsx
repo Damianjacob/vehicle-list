@@ -15,8 +15,6 @@ const VehicleListItem = ({
     onPressCard,
     onPressLike,
 }: VehicleListItemProps) => {
-    // require the local image. Replace 'car.png' with your actual asset filename.
-
     return (
         <Pressable style={styles.mainContainer} onPress={onPressCard}>
             <View style={styles.imageContainer}>
