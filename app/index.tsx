@@ -5,7 +5,7 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { useRouter } from "expo-router";
 import { useContext, useState } from "react";
-import { FlatList, StyleSheet, View } from "react-native";
+import { FlatList, StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function Home() {
@@ -20,6 +20,11 @@ export default function Home() {
     } = useContext(CarsContext);
     const [modalOpen, setModalOpen] = useState(false);
     const router = useRouter();
+    const currentData = hasFiltersApplied
+        ? filteredVehicles
+        : showFavorites
+        ? favorites
+        : vehicles;
 
     return (
         <SafeAreaView style={{ flex: 1 }}>
@@ -43,14 +48,11 @@ export default function Home() {
                     />
                 </View>
             </View>
+            <Text style={{ paddingHorizontal: 8 }}>
+                {`Showing ${currentData.length} vehicles`}
+            </Text>
             <FlatList
-                data={
-                    hasFiltersApplied
-                        ? filteredVehicles
-                        : showFavorites
-                        ? favorites
-                        : vehicles
-                }
+                data={currentData}
                 keyExtractor={({ id }) => id.toString()}
                 renderItem={({ item }) => (
                     <VehicleListItem
@@ -61,8 +63,17 @@ export default function Home() {
                         onPressLike={addOrRemoveFavorite}
                     />
                 )}
-                style={{ flex: 1 }}
+                style={{ flex: 1, paddingHorizontal: 8 }}
                 ItemSeparatorComponent={() => <View style={{ height: 12 }} />}
+                ListEmptyComponent={
+                    <Text style={{ textAlign: "center", marginTop: 20 }}>
+                        {hasFiltersApplied
+                            ? "No results matching your filters"
+                            : showFavorites
+                            ? "You don't have any favorites"
+                            : "No vehicles available at this point. Please try again later"}
+                    </Text>
+                }
             />
             <FilterModal
                 modalOpen={modalOpen}

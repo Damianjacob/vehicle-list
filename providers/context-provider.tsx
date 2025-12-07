@@ -3,10 +3,12 @@ import { Filters } from "@/types/filters";
 import { createContext, PropsWithChildren, useMemo, useState } from "react";
 import data from "../vehicles.json";
 
-export const vehicleMakes = Array.from(new Set(data.map((item) => item.make)));
+export const vehicleMakes = Array.from(
+    new Set(data.map((item) => item.make))
+).sort();
 export const vehicleModels = Array.from(
     new Set(data.map((item) => item.model))
-);
+).sort();
 
 export interface CarsContextType {
     vehicles: Car[];
@@ -18,7 +20,6 @@ export interface CarsContextType {
     removeModelsFilter: (model: string) => void;
     setMinStartingBid: (value: number | undefined) => void;
     setMaxStartingBid: (value: number | undefined) => void;
-    resetStartingBids: () => void;
     resetFilters: () => void;
     filters: Filters;
     showFavorites: boolean;
@@ -37,7 +38,6 @@ export const CarsContext = createContext<CarsContextType>({
     removeModelsFilter: () => {},
     setMinStartingBid: () => {},
     setMaxStartingBid: () => {},
-    resetStartingBids: () => {},
     resetFilters: () => {},
     showFavorites: false,
     favorites: [],
@@ -73,7 +73,6 @@ export const ContextProvider = ({ children }: CarsContextProps) => {
     );
 
     const favoriteVehicles = useMemo(() => {
-        console.log("updateing favorite vehicles");
         if (!showFavorites) return [];
         return vehicles.filter((vehicle) => vehicle.favourite);
     }, [vehicles, showFavorites]);
@@ -155,12 +154,6 @@ export const ContextProvider = ({ children }: CarsContextProps) => {
         setFilters((prev) => ({ ...prev, maxStartingBid: value }));
     };
 
-    const resetStartingBids = () => {
-        setFilters((prev) => ({
-            ...prev,
-        }));
-    };
-
     const resetFilters = () => {
         setFilters({
             makes: [],
@@ -179,7 +172,6 @@ export const ContextProvider = ({ children }: CarsContextProps) => {
                 removeModelsFilter,
                 setMinStartingBid,
                 setMaxStartingBid,
-                resetStartingBids,
                 resetFilters,
                 showFavorites,
                 toggleShowFavorites,
